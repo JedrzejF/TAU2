@@ -60,13 +60,21 @@ dct = dict(zip(cz, eng))
 
 # Initialize values uniformly 
 t = defaultdict(int)
+n = defaultdict(int)
 stotal = defaultdict(int)
 for key in dct:
     eng_sentence = nltk.word_tokenize(dct[key])
     cz_sentence = nltk.word_tokenize(key)
     for e in eng_sentence:
         for cz in cz_sentence:
-            t[e, cz] = 0.001
+            n[e] += 1
+            
+for key in dct:
+    eng_sentence = nltk.word_tokenize(dct[key])
+    cz_sentence = nltk.word_tokenize(key)
+    for e in eng_sentence:
+        for cz in cz_sentence:
+            t[e, cz] = 1/n[e]
 
 # IBM Model 1 algorithm - pseudocode taken from lecture materials
 i = 0
@@ -87,6 +95,22 @@ for _ in itertools.repeat(None,25):
             for cz in cz_sentence:
                 for e in eng_sentence:
                     t[e, cz] = count[e, cz] / total[cz]
+
+# best translations -- if not found, we do not alter the word
+for cz in cz_sentence:
+    for e in eng_sentence:
+        if t[e, cz] <= 0.001:
+            t.pop[e, cz]
+    
+def find_word_translation(czech_word):
+    best_value = czech_word
+    best_score = 0
+    for key in t:
+        if czech_word == key[1]:
+            if t[key] > best_score:
+                best_value = key[0]
+                best_score = t[key]
+    return(best_value)
 
 test = open('test-A/in.tsv', 'r', encoding='utf-8')
 with open('test-A/out.tsv', 'w', encoding='utf-8') as test_results:
