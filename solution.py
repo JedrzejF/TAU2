@@ -74,7 +74,7 @@ for key in dct:
     cz_sentence = nltk.word_tokenize(key)
     for e in eng_sentence:
         for cz in cz_sentence:
-            t[e, cz] = 1/n[e]
+            t[e, cz] = 0.001
 
 # IBM Model 1 algorithm - pseudocode taken from lecture materials
 i = 0
