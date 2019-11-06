@@ -100,7 +100,7 @@ for _ in itertools.repeat(None,25):
 for cz in cz_sentence:
     for e in eng_sentence:
         if t[e, cz] <= 0.001:
-            t.pop[e, cz]
+            del(t[e, cz])
     
 def find_word_translation(czech_word):
     best_value = czech_word
